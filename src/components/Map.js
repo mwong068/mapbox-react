@@ -6,6 +6,13 @@ import { connect } from 'react-redux'
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 let Map = class Map extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      zoom: 9
+    }
+  }
+
   mapRef = React.createRef();
   map;
 
@@ -32,11 +39,18 @@ let Map = class Map extends React.Component {
         data: this.props.data
       });
 
-      this.map.addLayer({
-        id: 'countries',
-        type: 'fill',
-        source: 'countries'
-      }, 'country-label-lg'); // ID metches `mapbox/streets-v9`
+      // this.map.addLayer({
+      //   id: 'countries',
+      //   type: 'fill',
+      //   source: 'countries'
+      // }, 'country-label-lg'); // ID metches `mapbox/streets-v9`
+
+      this.map.on('move', () => {
+        this.setState({
+          zoom: this.map.getZoom().toFixed(2)
+
+        })
+      })
 
       this.setFill();
     });
